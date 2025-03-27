@@ -1,0 +1,40 @@
+<div class="main-wrapper">
+  <h2>Załaduj CV do sprawdzenia</h2>
+
+  <p-toast></p-toast>
+
+  <p-fileUpload
+    name="cv"
+    accept=".pdf"
+    [multiple]="false"
+    [customUpload]="true"
+    maxFileSize="1000000"
+    (uploadHandler)="uploadEvent($event)"
+    (onSelect)="onSelectedFiles($event)"
+  >
+
+    <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
+      <div class="flex gap-2">
+        <p-button icon="pi pi-upload" label="Wybierz" (onClick)="choose($event, chooseCallback)" />
+        <p-button icon="pi pi-cloud-upload" label="Wyślij" (onClick)="uploadEvent(uploadCallback)" [disabled]="!files?.length" severity="success" />
+        <p-button icon="pi pi-times" label="Wyczyść" (onClick)="clearUpload(clearCallback)" [disabled]="!files?.length" severity="danger" />
+      </div>
+    </ng-template>
+
+    <ng-template #content let-files>
+      <div *ngIf="files?.length">
+        <p class="mt-4">Wybrane pliki:</p>
+        <ul>
+          <li *ngFor="let file of files">{{ file.name }} – {{ formatSize(file.size) }}</li>
+        </ul>
+        <p-progressBar [value]="totalSizePercent" [showValue]="false" styleClass="mt-2 w-full"></p-progressBar>
+      </div>
+    </ng-template>
+
+    <ng-template #empty>
+      <div class="text-center p-4 text-muted">
+        Przeciągnij plik PDF tutaj lub użyj przycisku „Wybierz”.
+      </div>
+    </ng-template>
+  </p-fileUpload>
+</div>
